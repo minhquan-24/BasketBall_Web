@@ -1,0 +1,130 @@
+<?php
+
+class User {
+    private $conn;
+    private $table_name = "users";
+
+    // Thuộc tính của đối tượng User
+    public $id;
+    public $email;
+    public $password; // Sẽ dùng để nhận mật khẩu chưa băm
+    public $name;
+    public $role;
+    public $created_at;
+
+    // Hàm khởi tạo, nhận kết nối database
+    public function __construct($db) {
+        $this->conn = $db;
+    }
+
+    /**
+     * @return bool True nếu thành công, false nếu thất bại.
+     */
+    public function create() {
+        $query = "INSERT INTO " . $this->table_name . " (name, email, password) VALUES (:name, :email, :password)";
+        
+        $stmt = $this->conn->prepare($query);
+
+        // Làm sạch dữ liệu
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->email = htmlspecialchars(strip_tags($this->email)); # help with XSS
+        // Băm mật khẩu trước khi lưu
+        $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
+
+        // Gán dữ liệu vào câu lệnh
+        $stmt->bindParam(":email", $this->email);  # help with SQL Injection
+        $stmt->bindParam(":password", $password_hash); 
+        $stmt->bindParam(":name", $this->name);
+        
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Tìm một người dùng bằng email và đổ dữ liệu vào đối tượng hiện tại.
+     * @param string $email Email cần tìm.
+     * @return bool True nếu tìm thấy, false nếu không.
+     */
+    public function findByEmail($email) {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE email = ? LIMIT 0,1";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $email);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            // Đổ dữ liệu từ DB vào các thuộc tính của đối tượng
+            $this->id = $row['id'];
+            $this->name = $row['name'];
+            $this->email = $row['email'];
+            $this->password = $row['password']; // Đây là mật khẩu đã băm từ DB
+            $this->role = $row['role'];
+            $this->created_at = $row['created_at'];
+            return true;
+        }
+        return false;
+    }
+    public function readAll(){
+        $query = "SELECT id, email, name, role, created_at FROM " . $this->table_name . " ORDER BY created_at ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function readOne(){
+        $query = "SELECT id, email, name, role, created_at FROM " . $this->table_name . " WHERE id = ? LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($row){
+            $this->id = $row['id'];
+            $this->name = $row['name'];
+            $this->role = $row['role'];
+            $this->email = $row['email'];
+            $this->created_at = $row['created_at'];
+            return true;
+        }
+        return false;
+    }
+    public function delete() {
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        $this->id = htmlspecialchars(strip_tags($this->id));
+        $stmt->bindParam(1, $this->id);
+
+        return $stmt->execute();
+    }
+    // không cần update user vì dữ liệu ng dùng tự quyết
+
+    public function count() {
+    $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name;
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row['total_rows'];
+    }
+
+// 2. Hàm lấy user có phân trang
+    public function readPaging($from_record_num, $records_per_page) {
+    $query = "SELECT id, email, name, role, created_at 
+              FROM " . $this->table_name . " 
+              ORDER BY id ASC 
+              LIMIT :from, :limit";
+    
+    $stmt = $this->conn->prepare($query);
+    
+    $stmt->bindParam(":from", $from_record_num, PDO::PARAM_INT);
+    $stmt->bindParam(":limit", $records_per_page, PDO::PARAM_INT);
+    
+    $stmt->execute();
+    return $stmt;
+    }
+
+}

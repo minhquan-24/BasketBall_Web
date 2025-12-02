@@ -1,0 +1,24 @@
+body {
+    font-family: sans-serif;
+}
+
+.product-image-container {
+    height: 200px;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-image-container .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.form-check-input {
+  border: 10px solid #000 !important;   
+  border-radius: 10px !important;      
+}
+
