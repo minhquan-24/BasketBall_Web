@@ -18,7 +18,7 @@ class UserController{
         $total_rows = $userModel->count();
         $breadcrumbs = [['label' => 'Quản lý người dùng', 'url' => null]];
     
-        $page_title = "Quản lý Người dùng / Khách hàng";
+        $page_title = "Quản lý User";
         
         require '../resources/views/layouts/header.php';
         require '../resources/views/users/manage.php';

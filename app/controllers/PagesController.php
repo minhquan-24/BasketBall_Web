@@ -2,7 +2,7 @@
 
 class PagesController {
     public function home() {
-        $page_title = "Trang chủ - Basketball4Life | Cửa hàng giày bóng rổ uy tín";
+        $page_title = "Trang chủ - Basketball4Life";
         $meta_desc = "Chuyên cung cấp giày bóng rổ Nike, Jordan, Adidas chính hãng tại Việt Nam. Mẫu mới nhất, giá tốt nhất.";
         
         require '../resources/views/layouts/header.php';

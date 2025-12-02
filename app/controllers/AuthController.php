@@ -8,7 +8,7 @@ class AuthController {
     }
 
     public function showRegisterForm() {
-        $page_title = "Đăng ký tài khoản thành viên - Basketball4Life";
+        $page_title = "Đăng ký tài khoản - Basketball4Life";
         $breadcrumbs = [['label' => 'Đăng ký', 'url' => null]];
         require '../resources/views/layouts/header.php';
         require '../resources/views/auth/register.php';
@@ -17,7 +17,6 @@ class AuthController {
 
     public function register() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            // Nếu không phải POST, chỉ hiển thị form
             $this->showRegisterForm();
             return;
         }

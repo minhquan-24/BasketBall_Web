@@ -59,8 +59,9 @@ class CartController {
         }
         
         $page_title = "Giỏ hàng của bạn (" . count($cart) . " sản phẩm)";
+
         require '../resources/views/layouts/header.php';
-        require '../resources/views/cart/index.php'; // View này sẽ tạo ở bước sau
+        require '../resources/views/cart/index.php';
         require '../resources/views/layouts/footer.php';
     }
 

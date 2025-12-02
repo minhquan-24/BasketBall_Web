@@ -18,14 +18,13 @@ class OrderController {
         $orderModel = new Order($this->db);
         $orders = $orderModel->getUserOrders($_SESSION['user_id'])->fetchAll(PDO::FETCH_ASSOC);
 
-        $page_title = "Lịch sử mua hàng - Đơn hàng của tôi";
+        $page_title = "Lịch sử mua hàng";
 
         require '../resources/views/layouts/header.php';
         require '../resources/views/orders/history.php'; // View này tạo ở bước sau
         require '../resources/views/layouts/footer.php';
     }
     
-    // Xem chi tiết 1 đơn hàng
     public function detail() {
          if (!isset($_SESSION['user_id'])) { header("Location: index.php"); exit(); }
          

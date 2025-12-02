@@ -140,3 +140,27 @@ function changeImage(newSrc) {
         }
     });
 </script>
+<!-- SEO: Schema Markup cho Google Rich Snippets -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "<?php echo htmlspecialchars($product['name']); ?>",
+  "image": [
+    "<?php echo htmlspecialchars($primary_image); ?>"
+   ],
+  "description": "<?php echo htmlspecialchars(strip_tags($product['description'])); ?>",
+  "brand": {
+    "@type": "Brand",
+    "name": "<?php echo htmlspecialchars($product['manufacturer'] ?? 'Basketball4Life'); ?>"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>",
+    "priceCurrency": "VND",
+    "price": "<?php echo $product['price']; ?>",
+    "availability": "<?php echo (!empty($product['variants'])) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'; ?>",
+    "itemCondition": "https://schema.org/NewCondition"
+  }
+}
+</script>

@@ -43,7 +43,7 @@ class ProductController {
             $breadcrumbs[] = ['label' => $category_name, 'url' => null];
         }
         
-        $page_title = "Quản lý Sản phẩm (Admin)";
+        $page_title = "Quản lý Sản phẩm";
 
         require_once __DIR__ . '/../../../resources/views/layouts/header.php';
         require_once __DIR__ . '/../../../resources/views/products/manage.php';
