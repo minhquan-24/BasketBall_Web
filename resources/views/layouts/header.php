@@ -53,7 +53,9 @@ if(isset($_SESSION['cart'])){
                     <li class="nav-item">
                         <a class="nav-link" href="index.php">Trang chủ</a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?controller=contact&action=index">Liên hệ</a>
+                    </li>
                     <!-- **** LOGIC CHÍNH NẰM Ở ĐÂY **** -->
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <li class="nav-item dropdown">
