@@ -41,7 +41,15 @@ if(isset($_SESSION['cart'])){
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <form class="d-flex position-relative ms-3" role="search" onsubmit="return false;"> 
+                    <div class="input-group">
+                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                        <input class="form-control" type="search" id="live-search-input" placeholder="Tìm tên giày" aria-label="Search" autocomplete="off">
+                    </div>
+                    <div id="search-results" class="list-group position-absolute w-100 shadow mt-1" style="top: 100%; z-index: 9999; display: none;"></div>
+                </form>
+
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">    
                     <li class="nav-item">
                         <a class="nav-link" href="index.php">Trang chủ</a>
                     </li>
@@ -110,7 +118,7 @@ if(isset($_SESSION['cart'])){
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUser">
                                 <li>
-                                    <a class="dropdown-item" href="index.php?page=profile">
+                                    <a class="dropdown-item" href="index.php?controller=profile&action=index">
                                         Profile (<?php echo htmlspecialchars($_SESSION['user_name']); ?>)
                                     </a>
                                 </li>

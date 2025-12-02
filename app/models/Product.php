@@ -58,70 +58,132 @@ class Product {
      * @param string $sort Sắp xếp theo 'price_asc' hoặc 'price_desc'.
      * @return PDOStatement
      */
-    public function readPaging($from_record_num, $records_per_page, $category_id = null, $sort = 'created_at_desc') {
-        $query = "
-            SELECT c.name as category_name, p.*
-            FROM " . $this->table_name . " p
-            LEFT JOIN categories c ON p.category_id = c.id
-        ";
+    // public function readPaging($from_record_num, $records_per_page, $category_id = null, $sort = 'created_at_desc') {
+    //     $query = "
+    //         SELECT c.name as category_name, p.*
+    //         FROM " . $this->table_name . " p
+    //         LEFT JOIN categories c ON p.category_id = c.id
+    //     ";
         
-        // Lọc theo danh mục
-        if ($category_id !== null) {
-            $query .= " WHERE p.category_id = :category_id";
-        }
+    //     // Lọc theo danh mục
+    //     if ($category_id !== null) {
+    //         $query .= " WHERE p.category_id = :category_id";
+    //     }
 
-        // Sắp xếp
-        switch ($sort) {
-            case 'price_asc':
-                $order_by = "p.price ASC";
-                break;
-            case 'price_desc':
-                $order_by = "p.price DESC";
-                break;
-            case 'created_at_asc':
-                $order_by = "p.id ASC";
-                break;
-            default: 
-                $order_by = "p.created_at DESC";
-                break;
-        }
-        $query .= " ORDER BY {$order_by}";
+    //     // Sắp xếp
+    //     switch ($sort) {
+    //         case 'price_asc':
+    //             $order_by = "p.price ASC";
+    //             break;
+    //         case 'price_desc':
+    //             $order_by = "p.price DESC";
+    //             break;
+    //         case 'created_at_asc':
+    //             $order_by = "p.id ASC";
+    //             break;
+    //         default: 
+    //             $order_by = "p.created_at DESC";
+    //             break;
+    //     }
+    //     $query .= " ORDER BY {$order_by}";
 
-        // Phân trang
-        $query .= " LIMIT :from_record_num, :records_per_page";
+    //     // Phân trang
+    //     $query .= " LIMIT :from_record_num, :records_per_page";
 
-        $stmt = $this->conn->prepare($query);
+    //     $stmt = $this->conn->prepare($query);
 
-        if ($category_id !== null) {
-            $stmt->bindParam(":category_id", $category_id);
-        }
-        $stmt->bindParam(":from_record_num", $from_record_num, PDO::PARAM_INT);
-        $stmt->bindParam(":records_per_page", $records_per_page, PDO::PARAM_INT);
+    //     if ($category_id !== null) {
+    //         $stmt->bindParam(":category_id", $category_id);
+    //     }
+    //     $stmt->bindParam(":from_record_num", $from_record_num, PDO::PARAM_INT);
+    //     $stmt->bindParam(":records_per_page", $records_per_page, PDO::PARAM_INT);
         
-        $stmt->execute();
-        return $stmt;
+    //     $stmt->execute();
+    //     return $stmt;
+    // }
+
+    // /**
+    //  * Đếm tổng số sản phẩm (cần cho phân trang).
+    //  * @param int|null $category_id ID danh mục để lọc.
+    //  * @return int Tổng số sản phẩm.
+    //  */
+    // public function count($category_id = null) {
+    //     $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name;
+    //     if ($category_id !== null) {
+    //         $query .= " WHERE category_id = :category_id";
+    //     }
+
+    //     $stmt = $this->conn->prepare($query);
+    //     if ($category_id !== null) {
+    //         $stmt->bindParam(":category_id", $category_id);
+    //     }
+        
+    //     $stmt->execute();
+    //     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    //     return $row['total_rows'];
+    // }
+
+    public function readPaging($from_record_num, $records_per_page, $category_id = null, $sort = 'created_at_desc', $keyword = null) {
+    $query = "
+        SELECT c.name as category_name, p.*
+        FROM " . $this->table_name . " p
+        LEFT JOIN categories c ON p.category_id = c.id
+        WHERE 1=1 
+    ";
+    
+    // Logic lọc: Nếu có category_id thì thêm điều kiện
+    if ($category_id !== null) {
+        $query .= " AND p.category_id = :category_id";
     }
 
-    /**
-     * Đếm tổng số sản phẩm (cần cho phân trang).
-     * @param int|null $category_id ID danh mục để lọc.
-     * @return int Tổng số sản phẩm.
-     */
-    public function count($category_id = null) {
-        $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name;
-        if ($category_id !== null) {
-            $query .= " WHERE category_id = :category_id";
-        }
-
-        $stmt = $this->conn->prepare($query);
-        if ($category_id !== null) {
-            $stmt->bindParam(":category_id", $category_id);
-        }
-        
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['total_rows'];
+    // LOGIC MỚI: Nếu có keyword thì thêm điều kiện tìm tên
+    if ($keyword !== null) {
+        $query .= " AND p.name LIKE :keyword";
     }
+
+    // Logic sắp xếp (giữ nguyên)
+    switch ($sort) {
+        case 'price_asc': $order_by = "p.price ASC"; break;
+        case 'price_desc': $order_by = "p.price DESC"; break;
+        default: $order_by = "p.created_at DESC"; break;
+    }
+    $query .= " ORDER BY {$order_by} LIMIT :from_record_num, :records_per_page";
+
+    $stmt = $this->conn->prepare($query);
+
+    // Bind giá trị
+    if ($category_id !== null) $stmt->bindParam(":category_id", $category_id);
+    if ($keyword !== null) {
+        $searchTerm = "%{$keyword}%";
+        $stmt->bindParam(":keyword", $searchTerm);
+    }
+    
+    $stmt->bindParam(":from_record_num", $from_record_num, PDO::PARAM_INT);
+    $stmt->bindParam(":records_per_page", $records_per_page, PDO::PARAM_INT);
+    
+    $stmt->execute();
+    return $stmt;
+}
+
+// 2. Sửa hàm count: Cũng phải đếm theo keyword
+public function count($category_id = null, $keyword = null) {
+    $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name . " WHERE 1=1";
+    
+    if ($category_id !== null) $query .= " AND category_id = :category_id";
+    if ($keyword !== null) $query .= " AND name LIKE :keyword";
+
+    $stmt = $this->conn->prepare($query);
+    
+    if ($category_id !== null) $stmt->bindParam(":category_id", $category_id);
+    if ($keyword !== null) {
+        $searchTerm = "%{$keyword}%";
+        $stmt->bindParam(":keyword", $searchTerm);
+    }
+    
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row['total_rows'];
+}
 
     public function findById($id) {
         // 1. Lấy thông tin sản phẩm chính
