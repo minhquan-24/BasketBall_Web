@@ -36,7 +36,6 @@
             </div>
         </div>
 
-    <!-- Bản đồ Google Maps nhúng (Embed) -->
     <div class="row mt-5">
         <div class="col-12">
             <div class="card border-0 shadow-sm">

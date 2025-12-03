@@ -55,12 +55,12 @@ Dự án sử dụng các công nghệ và thư viện sau (đã được docume
 project-root/
 │
 ├── app/                 # Chứa logic ứng dụng (Core MVC)
-│   ├── controllers/     # Xử lý điều hướng (Admin & User)
+│   ├── controllers/     # Xử lý điều hướng
 │   ├── models/          # Tương tác với Database
-│   └── core/            # Các file cốt lõi (Database Connection)
+│   └── core/            # Database Connection
 │
 ├── config/              # File cấu hình (database.php)
-├── public/              # Thư mục public ra ngoài (css, js, images, index.php)
+├── public/              # Thư mục public (css, js, images, index.php)
 ├── resources/           # Views (Giao diện HTML/PHP)
 │   └── views/           # Các file giao diện (products, cart, admin...)
-└── README.md            # Tài liệu dự án
+└── README.md            # Tài liệu mô tả dự án

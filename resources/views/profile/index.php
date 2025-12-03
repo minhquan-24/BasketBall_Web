@@ -3,7 +3,6 @@
         <div class="col-md-8 col-lg-6">
             <div class="card shadow border-0 rounded-3">
                 <div class="card-header bg-primary text-white text-center py-4 rounded-top">
-                    <!-- Avatar giả định: Lấy chữ cái đầu của tên -->
                     <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle shadow-sm mb-3" 
                          style="width: 80px; height: 80px; font-size: 2.5rem; font-weight: bold;">
                         <?php echo strtoupper(substr($user->name, 0, 1)); ?>

@@ -6,7 +6,7 @@
         </a>
     </div>
 
-    <!-- Thông báo nếu vừa đặt hàng xong -->
+    <!-- Thông báo vừa đặt hàng xong -->
     <?php if (isset($_GET['status']) && $_GET['status'] == 'order_success'): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong><i class="bi bi-check-circle-fill"></i> Đặt hàng thành công!</strong> 
@@ -51,7 +51,6 @@
                             </td>
                             <td>
                                 <?php 
-                                    // Logic màu sắc trạng thái (Giống Admin nhưng hiển thị cho User)
                                     $status_color = [
                                         'pending' => 'bg-warning text-dark',
                                         'confirmed' => 'bg-info text-dark',
@@ -72,7 +71,6 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <!-- Link trỏ về action detail của User -->
                                 <a href="index.php?controller=order&action=detail&id=<?php echo $order['id']; ?>" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-eye"></i> Chi tiết
                                 </a>

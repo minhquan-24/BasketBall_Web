@@ -53,8 +53,6 @@
                         <?php endif; ?>
                     </td>
                     <td>
-                        <!-- Nút Xóa, trỏ đến action 'delete' sau này -->
-                        <!-- Admin không thể tự xóa chính mình -->
                         <?php if ($_SESSION['user_id'] != $id): ?>
                         <a href="index.php?area=admin&controller=user&action=delete&id=<?php echo $id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác.');">
                             <i class="bi bi-trash"></i> Delete
@@ -78,7 +76,7 @@
 
         if ($total_rows > 0 && $total_pages > 1):
             $query_params = $_GET;
-            unset($query_params['status']); // Xóa status khỏi link phân trang
+            unset($query_params['status']); 
 
             // Nút 'Trước'
             if ($page_num > 1):
@@ -107,26 +105,19 @@
 </nav>
 
 <script>
-    // Đoạn code này sẽ chạy khi trang tải xong
     if (window.history.replaceState) {
-        // Lấy URL hiện tại
         const url = new URL(window.location.href);
         
-        // Nếu trên URL có tham số 'status'
         if (url.searchParams.has('status')) {
-            // Xóa nó đi
             url.searchParams.delete('status');
             
-            // Cập nhật lại thanh địa chỉ mà không reload trang
             window.history.replaceState(null, '', url.toString());
         }
     }
     
-    // (Tùy chọn) Tự động ẩn thông báo sau 3 giây cho đẹp
     setTimeout(function() {
         let alerts = document.querySelectorAll('.alert');
         alerts.forEach(function(alert) {
-            // Dùng Bootstrap class để ẩn (nếu dùng Bootstrap 5)
             let bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
         });

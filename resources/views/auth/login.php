@@ -2,12 +2,10 @@
     <div class="col-md-6">
         <h1 class="text-center">Log in</h1>
         
-        <!--  thông báo register thành công -->
         <?php if (isset($_GET['register_success'])): ?>
             <div class="alert alert-success">Succesful Register! Please Login.</div>
         <?php endif; ?>
 
-        <!-- Lỗi nếu có -->
         <?php if (isset($error)): ?>
             <div class="alert alert-danger"><?php echo $error; ?></div>
         <?php endif; ?>

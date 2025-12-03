@@ -41,7 +41,7 @@ class ProductsController {
 
         if ($keyword) {
         $page_title = "Kết quả tìm kiếm: '" . htmlspecialchars($keyword) . "'";
-        $category_name = "Tìm kiếm: " . htmlspecialchars($keyword); // Để hiển thị trên giao diện
+        $category_name = "Tìm kiếm: " . htmlspecialchars($keyword);
     } elseif ($category_name) {
         $page_title = $category_name;
     } else {
@@ -90,29 +90,26 @@ class ProductsController {
     }
     
     public function searchAjax() {
-    // 1. Lấy từ khóa người dùng gõ
     $keyword = $_GET['keyword'] ?? '';
     
-    // 2. Chỉ tìm khi có từ khóa
     if (!empty($keyword)) {
-        // Câu lệnh SQL tìm sản phẩm có tên CHỨA từ khóa (LIKE %...%)
-        // Chỉ lấy 5 sản phẩm để gợi ý cho gọn
+        
         $query = "SELECT id, name, price, image_url 
                   FROM products 
                   WHERE name LIKE :keyword 
                   LIMIT 5";
                   
         $stmt = $this->db->prepare($query);
-        $searchTerm = "%" . $keyword . "%"; // Thêm dấu % để tìm kiếm tương đối
+        $searchTerm = "%" . $keyword . "%"; 
         $stmt->bindParam(':keyword', $searchTerm);
         $stmt->execute();
         
         $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
-        // 3. Quan trọng: Trả về JSON (Dữ liệu máy đọc)
+        // Trả về JSON (Dữ liệu máy đọc)
         header('Content-Type: application/json');
         echo json_encode($products);
-        exit; // Kết thúc ngay, không load header/footer nữa
+        exit; 
     }
 }
 

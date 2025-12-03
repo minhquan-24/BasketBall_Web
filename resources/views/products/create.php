@@ -47,10 +47,8 @@
         </div>
         <hr>
     
-    <!-- **** BẮT ĐẦU KHỐI CODE MỚI CẦN THÊM VÀO **** -->
     <h4>Quản lý Size và Số lượng</h4>
     <div id="variants-container">
-        <!-- Dòng mẫu, JavaScript sẽ sao chép dòng này -->
         <div class="row align-items-center mb-2 variant-row">
             <div class="col-md-4">
                 <label class="form-label">Size</label>
@@ -67,7 +65,6 @@
         </div>
     </div>
     <button type="button" id="add-variant-btn" class="btn btn-secondary btn-sm mt-2"><i class="bi bi-plus-circle"></i> Thêm Size khác</button>
-    <!-- **** KẾT THÚC KHỐI CODE MỚI **** -->
     
     <hr>
     </div>
@@ -81,16 +78,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const addButton = document.getElementById('add-variant-btn');
 
     function addVariantRow() {
-        // Sao chép dòng mẫu đầu tiên
         const newRow = container.querySelector('.variant-row').cloneNode(true);
-        // Reset giá trị của dòng mới
         newRow.querySelector('input[name="variants[size][]"]').value = '';
         newRow.querySelector('input[name="variants[quantity][]"]').value = '0';
         container.appendChild(newRow);
     }
 
     function removeVariantRow(event) {
-        // Chỉ xóa khi nhấn nút "Xóa" và còn nhiều hơn 1 dòng
         if (event.target.classList.contains('remove-variant-btn') && container.querySelectorAll('.variant-row').length > 1) {
             event.target.closest('.variant-row').remove();
         }

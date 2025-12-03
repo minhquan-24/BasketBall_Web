@@ -4,7 +4,7 @@
     </a>
 
     <div class="row">
-        <!-- Cột trái: Danh sách sản phẩm -->
+        <!-- Danh sách sản phẩm -->
         <div class="col-md-8">
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary text-white">
@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <!-- Cột phải: Thông tin nhận hàng -->
+        <!-- Thông tin nhận hàng -->
         <div class="col-md-4">
             <div class="card shadow-sm">
                 <div class="card-header bg-success text-white">

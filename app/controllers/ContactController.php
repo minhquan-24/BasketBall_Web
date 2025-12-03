@@ -2,17 +2,15 @@
 
 class ContactController {
     public function index() {
-        // Thiết lập SEO
         $page_title = "Liên hệ - Basketball4Life";
         $meta_desc = "Liên hệ với Basketball4Life. Địa chỉ: 20 Lý Tự Trọng, Quận 1, TPHCM. Hotline: 0908234567.";
 
-        // Breadcrumbs
         $breadcrumbs = [
             ['label' => 'Liên hệ', 'url' => null]
         ];
 
         require '../resources/views/layouts/header.php';
-        require '../resources/views/contact/index.php'; // Chúng ta sẽ tạo file này ngay dưới
+        require '../resources/views/contact/index.php';
         require '../resources/views/layouts/footer.php';
     }
 }

@@ -17,11 +17,9 @@
     </form>
 </div>
 
-<!-- Vùng hiển thị sản phẩm -->
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
     <?php if ($num > 0): ?>
         <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): extract($row); ?>
-            <!-- Card sản phẩm không thay đổi -->
             <div class="col">
                 <div class="card h-100 shadow-sm">
                     <a href="index.php?controller=products&action=show&id=<?php echo $id; ?>">
@@ -48,7 +46,6 @@
     <?php endif; ?>
 </div>
 
-<!-- Vùng hiển thị các nút Phân trang ĐÃ SỬA LỖI HOÀN CHỈNH -->
 <nav aria-label="Page navigation" class="mt-5">
     <ul class="pagination justify-content-center">
         <?php

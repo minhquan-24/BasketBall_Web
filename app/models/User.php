@@ -4,35 +4,28 @@ class User {
     private $conn;
     private $table_name = "users";
 
-    // Thuộc tính của đối tượng User
     public $id;
     public $email;
-    public $password; // Sẽ dùng để nhận mật khẩu chưa băm
+    public $password; 
     public $name;
     public $role;
     public $created_at;
 
-    // Hàm khởi tạo, nhận kết nối database
     public function __construct($db) {
         $this->conn = $db;
     }
 
-    /**
-     * @return bool True nếu thành công, false nếu thất bại.
-     */
+    
     public function create() {
         $query = "INSERT INTO " . $this->table_name . " (name, email, password) VALUES (:name, :email, :password)";
         
         $stmt = $this->conn->prepare($query);
 
-        // Làm sạch dữ liệu
         $this->name = htmlspecialchars(strip_tags($this->name));
-        $this->email = htmlspecialchars(strip_tags($this->email)); # help with XSS
-        // Băm mật khẩu trước khi lưu
+        $this->email = htmlspecialchars(strip_tags($this->email)); 
         $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
 
-        // Gán dữ liệu vào câu lệnh
-        $stmt->bindParam(":email", $this->email);  # help with SQL Injection
+        $stmt->bindParam(":email", $this->email);  
         $stmt->bindParam(":password", $password_hash); 
         $stmt->bindParam(":name", $this->name);
         
@@ -42,11 +35,7 @@ class User {
         return false;
     }
 
-    /**
-     * Tìm một người dùng bằng email và đổ dữ liệu vào đối tượng hiện tại.
-     * @param string $email Email cần tìm.
-     * @return bool True nếu tìm thấy, false nếu không.
-     */
+    
     public function findByEmail($email) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE email = ? LIMIT 0,1";
         
@@ -57,11 +46,10 @@ class User {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row) {
-            // Đổ dữ liệu từ DB vào các thuộc tính của đối tượng
             $this->id = $row['id'];
             $this->name = $row['name'];
             $this->email = $row['email'];
-            $this->password = $row['password']; // Đây là mật khẩu đã băm từ DB
+            $this->password = $row['password'];
             $this->role = $row['role'];
             $this->created_at = $row['created_at'];
             return true;
@@ -101,7 +89,6 @@ class User {
 
         return $stmt->execute();
     }
-    // không cần update user vì dữ liệu ng dùng tự quyết
 
     public function count() {
     $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name;
@@ -111,7 +98,6 @@ class User {
     return $row['total_rows'];
     }
 
-// 2. Hàm lấy user có phân trang
     public function readPaging($from_record_num, $records_per_page) {
     $query = "SELECT id, email, name, role, created_at 
               FROM " . $this->table_name . " 

@@ -11,7 +11,7 @@
         <!-- MỞ FORM BAO QUANH CẢ 2 CỘT -->
         <form action="index.php?controller=cart&action=checkout" method="POST" id="cart-form">
             <div class="row">
-                <!-- Cột trái: Danh sách sản phẩm -->
+                <!-- Danh sách sản phẩm -->
                 <div class="col-lg-8">
                     <div class="card shadow-sm border-0 mb-4">
                         <div class="card-header bg-white py-3">
@@ -40,7 +40,6 @@
                                     ?>
                                     <tr>
                                         <td>
-                                            <!-- Checkbox chọn từng món -->
                                             <input class="form-check-input item-checkbox" type="checkbox" 
                                                    name="selected_items[]" 
                                                    value="<?php echo $index; ?>"
@@ -78,7 +77,7 @@
                     </div>
                 </div>
 
-                <!-- Cột phải: Form thanh toán -->
+                <!-- Form thanh toán -->
                 <div class="col-lg-4">
                     <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
                         <div class="card-header bg-primary text-white">
@@ -96,7 +95,6 @@
                             <hr>
                             
                             <?php if(isset($_SESSION['user_id'])): ?>
-                                <!-- Các trường thông tin nhận hàng -->
                                 <div class="mb-3">
                                     <label class="form-label">Họ tên người nhận</label>
                                     <input type="text" name="fullname" class="form-control" 
@@ -141,12 +139,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedCountEl = document.getElementById('selected-count');
     const btnCheckout = document.getElementById('btn-checkout');
 
-    // Hàm định dạng tiền tệ VNĐ
     function formatCurrency(amount) {
         return new Intl.NumberFormat('vi-VN').format(amount) + ' VNĐ';
     }
 
-    // Hàm cập nhật tổng tiền
     function updateTotal() {
         let total = 0;
         let count = 0;
@@ -161,13 +157,11 @@ document.addEventListener('DOMContentLoaded', function() {
         totalPriceEl.textContent = formatCurrency(total);
         selectedCountEl.textContent = count + ' sản phẩm';
 
-        // Ẩn/Hiện nút thanh toán
         if (btnCheckout) {
             btnCheckout.disabled = (count === 0);
         }
     }
 
-    // Sự kiện khi bấm "Chọn tất cả"
     if (selectAll) {
         selectAll.addEventListener('change', function() {
             itemCheckboxes.forEach(cb => {
@@ -177,14 +171,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Sự kiện khi bấm từng checkbox
     itemCheckboxes.forEach(cb => {
         cb.addEventListener('change', function() {
-            // Nếu bỏ chọn 1 cái thì bỏ chọn "Tất cả"
             if (!this.checked && selectAll) {
                 selectAll.checked = false;
             }
-            // Nếu chọn hết thì tick "Tất cả"
             if (selectAll && document.querySelectorAll('.item-checkbox:checked').length === itemCheckboxes.length) {
                 selectAll.checked = true;
             }

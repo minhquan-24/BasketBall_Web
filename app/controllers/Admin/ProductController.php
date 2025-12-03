@@ -1,5 +1,4 @@
 <?php
-// Nạp các model cần thiết
 require_once __DIR__ . '/../../../app/models/Product.php';
 require_once __DIR__ . '/../../../app/models/Category.php';
 
@@ -23,7 +22,7 @@ class ProductController {
         $sort = isset($_GET['sort']) ? $_GET['sort'] : 'created_at_asc';
         
         $records_per_page = 10; 
-        $from_record_num = ($records_per_page * $page_num) - $records_per_page; // số item bỏ qua để xem được page hiện tại.
+        $from_record_num = ($records_per_page * $page_num) - $records_per_page;
 
         $stmt = $this->productModel->readPaging($from_record_num, $records_per_page, $category_id, $sort);
         $num = $stmt->rowCount();
@@ -50,10 +49,8 @@ class ProductController {
         require_once __DIR__ . '/../../../resources/views/layouts/footer.php';
     }
 
-    // Các action khác (create, store, edit, update, destroy) sẽ được thêm vào đây
-    // ... (hàm manage giữ nguyên) ...
+    
     public function create() {
-        // Lấy danh sách danh mục để hiển thị trong form
         $categories_stmt = $this->categoryModel->readAll();
         $all_categories = $categories_stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -70,16 +67,14 @@ class ProductController {
 
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Gán dữ liệu từ POST vào model
             $this->productModel->name = $_POST['name'];
             $this->productModel->description = $_POST['description'];
             $this->productModel->price = $_POST['price'];
             $this->productModel->manufacturer = $_POST['manufacturer'];
             $this->productModel->usage_type = $_POST['usage_type'];
             $this->productModel->category_id = $_POST['category_id'];
-            $this->productModel->image_url = $_POST['image_url']; // Tạm thời dùng URL, sau này có thể nâng cấp upload file
+            $this->productModel->image_url = $_POST['image_url'];
             
-            // Validation (bạn có thể thêm logic kiểm tra dữ liệu ở đây)
 
             if ($this->productModel->create()) {
                 $variantsData = $_POST['variants'] ?? [];
@@ -94,15 +89,12 @@ class ProductController {
     }
 
     public function edit() {
-        // Lấy ID từ URL
         $this->productModel->id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: missing ID.');
 
-        // Gọi model để đọc thông tin sản phẩm hiện tại
         if (!$this->productModel->readOne()) {
             die('Sản phẩm không tồn tại.');
         }
 
-        // Lấy danh sách danh mục để hiển thị trong form
         $categories_stmt = $this->categoryModel->readAll();
         $all_categories = $categories_stmt->fetchAll(PDO::FETCH_ASSOC);
         $product_variants = $this->productModel->getVariants();
@@ -118,12 +110,9 @@ class ProductController {
         require '../resources/views/layouts/footer.php';
     }
 
-    /**
-     * Action xử lý dữ liệu từ form sửa và cập nhật vào database.
-     */
+    
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Gán dữ liệu từ form vào đối tượng model
             $this->productModel->id = $_POST['id'];
             $this->productModel->name = $_POST['name'];
             $this->productModel->description = $_POST['description'];

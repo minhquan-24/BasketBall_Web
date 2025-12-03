@@ -2,7 +2,6 @@
     <div class="col-md-6">
         <h1 class="text-center">Register</h1>
         
-        <!-- Hiển thị thông báo lỗi nếu có -->
         <?php if (isset($errors) && !empty($errors)): ?>
             <div class="alert alert-danger">
                 <ul>

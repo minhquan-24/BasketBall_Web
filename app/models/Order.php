@@ -36,12 +36,10 @@ class Order {
                            VALUES (?, ?, ?, ?, ?)";
             $stmt_item = $this->conn->prepare($query_item);
 
-            // 3. Trừ kho (Optional - nếu muốn làm nâng cao)
             $query_update_stock = "UPDATE product_variants SET quantity = quantity - ? WHERE id = ?";
             $stmt_stock = $this->conn->prepare($query_update_stock);
 
             foreach ($cart_items as $item) {
-                // Lưu chi tiết đơn
                 $stmt_item->execute([
                     $order_id, 
                     $item['product_id'], 
@@ -50,7 +48,6 @@ class Order {
                     $item['price']
                 ]);
 
-                // Trừ số lượng tồn kho
                 if(!empty($item['variant_id'])){
                      $stmt_stock->execute([$item['quantity'], $item['variant_id']]);
                 }
@@ -64,7 +61,6 @@ class Order {
         }
     }
 
- // Lấy danh sách đơn hàng (Dùng cho Admin)
     public function getAllOrders() {
         $query = "SELECT * FROM " . $this->table_name . " ORDER BY created_at ASC";
         $stmt = $this->conn->prepare($query);
@@ -72,7 +68,6 @@ class Order {
         return $stmt;
     }
 
-    // Lấy danh sách đơn hàng của 1 User (Dùng cho User xem lịch sử)
     public function getUserOrders($user_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE user_id = ? ORDER BY created_at ASC";
         $stmt = $this->conn->prepare($query);
@@ -80,9 +75,7 @@ class Order {
         return $stmt;
     }
 
-    // Lấy chi tiết 1 đơn hàng (Kèm items)
     public function getOrderDetail($order_id) {
-        // Lấy thông tin chung
         $query = "SELECT * FROM " . $this->table_name . " WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->execute([$order_id]);
@@ -90,7 +83,6 @@ class Order {
 
         if (!$order) return null;
 
-        // Lấy danh sách sản phẩm trong đơn
         $query_items = "
             SELECT oi.*, p.name as product_name, p.image_url, v.size 
             FROM order_items oi
@@ -105,7 +97,6 @@ class Order {
         return $order;
     }
     
-    // Cập nhật trạng thái đơn hàng
     public function updateStatus($id, $status) {
         $query = "UPDATE " . $this->table_name . " SET status = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
@@ -113,7 +104,6 @@ class Order {
     }
     
     public function cancelOrder($order_id) {
-    // Chỉ hủy được khi trạng thái là 'pending'
     $query_check = "SELECT status FROM " . $this->table_name . " WHERE id = ?";
     $stmt_check = $this->conn->prepare($query_check);
     $stmt_check->execute([$order_id]);
@@ -124,7 +114,7 @@ class Order {
         $stmt = $this->conn->prepare($query);
         return $stmt->execute([$order_id]);
     }
-    return false; // Không tìm thấy hoặc trạng thái không phải pending
+    return false;
     }
 }
 ?>

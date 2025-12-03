@@ -8,12 +8,11 @@ class UserController{
 
     public function index(){
         $page_num = isset($_GET['page_num']) ? (int)$_GET['page_num'] : 1;
-        $records_per_page = 10; // Số user mỗi trang
+        $records_per_page = 10; 
         $from_record_num = ($records_per_page * $page_num) - $records_per_page;
 
         $userModel = new User($this->db);
     
-    // Lấy dữ liệu phân trang thay vì readAll()
         $stmt = $userModel->readPaging($from_record_num, $records_per_page);
         $total_rows = $userModel->count();
         $breadcrumbs = [['label' => 'Quản lý người dùng', 'url' => null]];

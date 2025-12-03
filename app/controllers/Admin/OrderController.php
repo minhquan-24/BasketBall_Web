@@ -46,7 +46,6 @@ class OrderController {
 
     public function cancel() {
     $order_id = $_GET['id'] ?? 0;
-    // Admin có quyền hủy mọi đơn hàng pending
     if ($this->orderModel->cancelOrder($order_id)) {
         header("Location: index.php?area=admin&controller=order&action=index&status=cancel_success");
     } else {

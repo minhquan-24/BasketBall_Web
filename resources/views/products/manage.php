@@ -49,7 +49,6 @@
                 <tr>
                     <td><?php echo $id; ?></td>
                     <td>
-                    <!-- Ảnh có thể click được -->
                     <a href="index.php?area=admin&controller=product&action=show&id=<?php echo $id; ?>">
                         <img src="<?php echo htmlspecialchars($image_url ?? 'https://via.placeholder.com/100'); ?>" alt="<?php echo htmlspecialchars($name); ?>" style="width: 80px; height: 80px; object-fit: contain;">
                     </a>
@@ -90,7 +89,6 @@
                 'controller' => 'product',
                 'action' => 'manage'
             ];
-            // Nếu có lọc category, thêm vào mảng
             if (!empty($category_id)) {
                 $base_url_params['category_id'] = $category_id;
             }
@@ -101,7 +99,6 @@
                 echo "<li class='page-item'><a class='page-link' href='{$prev_page_url}'>&laquo; Trước</a></li>";
             endif;
 
-            // Các nút số trang
             for ($i = 1; $i <= $total_pages; $i++):
                 $active_class = ($i == $page_num) ? 'active' : '';
                 $page_params = array_merge($base_url_params, ['page_num' => $i]);
@@ -109,7 +106,6 @@
                 echo "<li class='page-item {$active_class}'><a class='page-link' href='{$page_url}'>{$i}</a></li>";
             endfor;
 
-            // Nút 'Trang sau'
             if ($page_num < $total_pages):
                 $next_page_params = array_merge($base_url_params, ['page_num' => $page_num + 1]);
                 $next_page_url = 'index.php?' . http_build_query($next_page_params);
@@ -125,9 +121,7 @@
         <?php
         $total_pages = ceil($total_rows / $records_per_page);
 
-        // Hiển thị phân trang chỉ khi có sản phẩm
         if ($total_rows > 0 && $total_pages > 1):
-            // Lấy tất cả các tham số hiện có trên URL
             $query_params = $_GET;
             unset($query_params['status']); 
 
@@ -159,26 +153,19 @@
 
 
 <script>
-    // Đoạn code này sẽ chạy khi trang tải xong
     if (window.history.replaceState) {
-        // Lấy URL hiện tại
         const url = new URL(window.location.href);
         
-        // Nếu trên URL có tham số 'status'
         if (url.searchParams.has('status')) {
-            // Xóa nó đi
             url.searchParams.delete('status');
             
-            // Cập nhật lại thanh địa chỉ mà không reload trang
             window.history.replaceState(null, '', url.toString());
         }
     }
     
-    // (Tùy chọn) Tự động ẩn thông báo sau 3 giây cho đẹp
     setTimeout(function() {
         let alerts = document.querySelectorAll('.alert');
         alerts.forEach(function(alert) {
-            // Dùng Bootstrap class để ẩn (nếu dùng Bootstrap 5)
             let bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
         });

@@ -30,7 +30,6 @@
         </div>
     </div>
 
-    <!-- Cột bên phải: Thông tin chung (Giữ nguyên không đổi) -->
     <div class="col-md-5">
         <h1><?php echo htmlspecialchars($product['name']); ?></h1>
         <p class="text-muted">Nhà sản xuất: <strong><?php echo htmlspecialchars($product['manufacturer']); ?></strong></p>
@@ -42,8 +41,7 @@
         <p class="mt-3"><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
         <hr>
 
-        <!-- **** BẮT ĐẦU LOGIC PHÂN TÁCH GIAO DIỆN THEO VAI TRÒ **** -->
-        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): // ---- NẾU LÀ ADMIN ---- ?>
+        <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'):  ?>
             
             <div class="p-3 mb-2 bg-light rounded border">
                 <h5 class="mb-3"><i class="bi bi-box-seam me-2"></i>Thông tin Kho hàng</h5>
@@ -78,7 +76,7 @@
                 </a>
             </div>
 
-        <?php else: // ---- NẾU LÀ USER HOẶC GUEST ---- ?>
+        <?php else:  ?>
             
             <form action="index.php?controller=cart&action=add" method="POST">
                 <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
@@ -119,7 +117,6 @@ function changeImage(newSrc) {
     document.getElementById('main-product-image').src = newSrc;
 }
     document.addEventListener('DOMContentLoaded', function() {
-        // Lấy các element cần thiết bằng ID
         const sizeSelect = document.getElementById('size-select');
         const quantityInput = document.getElementById('quantity-input');
         const addToCartBtn = document.getElementById('add-to-cart-btn');
@@ -135,7 +132,6 @@ function changeImage(newSrc) {
                     quantityInput.disabled = false;
                     addToCartBtn.disabled = false;
                 } else {
-                    // Vô hiệu hóa ô số lượng và nút bấm
                     quantityInput.disabled = true;
                     addToCartBtn.disabled = true;
                     quantityInput.value = 1;

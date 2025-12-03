@@ -8,7 +8,6 @@ class OrderController {
         $this->db = $db;
     }
 
-    // Xem lịch sử đơn hàng của tôi
     public function history() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?controller=auth&action=login");
@@ -21,7 +20,7 @@ class OrderController {
         $page_title = "Lịch sử mua hàng";
 
         require '../resources/views/layouts/header.php';
-        require '../resources/views/orders/history.php'; // View này tạo ở bước sau
+        require '../resources/views/orders/history.php'; 
         require '../resources/views/layouts/footer.php';
     }
     
@@ -32,7 +31,6 @@ class OrderController {
          $orderModel = new Order($this->db);
          $order = $orderModel->getOrderDetail($id);
          
-         // Bảo mật: Không cho xem đơn của người khác
          if(!$order || $order['user_id'] != $_SESSION['user_id']) {
              die("Không tìm thấy đơn hàng hoặc bạn không có quyền xem.");
          }
@@ -49,7 +47,6 @@ class OrderController {
     $order_id = $_GET['id'] ?? 0;
     $orderModel = new Order($this->db);
     
-    // Kiểm tra xem đơn hàng có phải của User này không
     $order = $orderModel->getOrderDetail($order_id);
     if ($order && $order['user_id'] == $_SESSION['user_id']) {
         if ($orderModel->cancelOrder($order_id)) {

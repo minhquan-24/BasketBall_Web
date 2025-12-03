@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
         searchInput.addEventListener('keyup', function(e) {
             const keyword = this.value.trim();
             
-            // Nếu ấn Enter thì chuyển trang luôn
             if (e.key === 'Enter' && keyword.length > 0) {
                 window.location.href = `index.php?controller=products&action=index&keyword=${keyword}`;
                 return;
@@ -21,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (data.length > 0) {
                             resultsContainer.style.display = 'block';
                             
-                            // 1. Hiển thị 5 sản phẩm gợi ý (như cũ)
                             data.forEach(product => {
                                 const price = new Intl.NumberFormat('vi-VN').format(product.price);
                                 const item = document.createElement('a');
@@ -37,9 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 resultsContainer.appendChild(item);
                             });
 
-                            // 2. LOGIC MỚI: THÊM NÚT "XEM TẤT CẢ" Ở CUỐI
                             const viewAllLink = document.createElement('a');
-                            // Đường dẫn trỏ về trang index có kèm keyword
                             viewAllLink.href = `index.php?controller=products&action=index&keyword=${keyword}`;
                             viewAllLink.className = 'list-group-item list-group-item-action text-center bg-light text-primary fw-bold py-2';
                             viewAllLink.innerHTML = `Xem tất cả kết quả cho "${keyword}" <i class="bi bi-arrow-right"></i>`;
@@ -47,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             resultsContainer.appendChild(viewAllLink);
                             
                         } else {
-                            // Nếu không tìm thấy sản phẩm nào
                             resultsContainer.innerHTML = '<div class="list-group-item text-muted p-2">Không tìm thấy sản phẩm phù hợp.</div>';
                         }
                     })
@@ -56,14 +51,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         resultsContainer.style.display = 'none';
                     });
             } else {
-                // Nếu người dùng xóa hết chữ hoặc chỉ gõ 1 chữ -> Ẩn khung kết quả
                 resultsContainer.style.display = 'none';
             }
         });
 
-        // 5. UX: Ẩn kết quả khi click ra ngoài vùng tìm kiếm
         document.addEventListener('click', function(e) {
-            // Nếu click không trúng ô input VÀ không trúng khung kết quả
             if (!searchInput.contains(e.target) && !resultsContainer.contains(e.target)) {
                 resultsContainer.style.display = 'none';
             }

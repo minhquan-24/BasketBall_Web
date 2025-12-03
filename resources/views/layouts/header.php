@@ -5,7 +5,6 @@ $header_db_conn = (new Database())->getConnection();
 $category = new Category($header_db_conn);
 $categories_stmt = $category->readAll();
 
-// **Cải tiến quan trọng**: Lấy tất cả danh mục vào một mảng để có thể lặp lại nhiều lần
 $all_categories = $categories_stmt->fetchAll(PDO::FETCH_ASSOC);
 $cart_count = 0;
 if(isset($_SESSION['cart'])){
@@ -56,7 +55,7 @@ if(isset($_SESSION['cart'])){
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?controller=contact&action=index">Liên hệ</a>
                     </li>
-                    <!-- **** LOGIC CHÍNH NẰM Ở ĐÂY **** -->
+                    <!-- LOGIC CHÍNH NẰM Ở ĐÂY -->
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -127,7 +126,6 @@ if(isset($_SESSION['cart'])){
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="index.php?controller=auth&action=logout">Logout</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <!-- Thêm dòng này vào dropdown menu của User -->
                                 <?php if(!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin'): ?>
                                     <li><a class="dropdown-item" href="index.php?controller=order&action=history">Lịch sử mua hàng</a></li>
                                 <?php endif; ?>
@@ -147,7 +145,6 @@ if(isset($_SESSION['cart'])){
     </nav>
 </header>
 
-<!-- Breadcrumbs (Giữ nguyên không đổi) -->
 <div class="container my-3">
     <?php if (isset($breadcrumbs) && is_array($breadcrumbs)): ?>
         <nav aria-label="breadcrumb">

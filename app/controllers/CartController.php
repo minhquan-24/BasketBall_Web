@@ -18,11 +18,9 @@ class CartController {
             $variant_id = isset($_POST['variant_id']) ? (int)$_POST['variant_id'] : null;
             $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
 
-            // Lấy thông tin sản phẩm từ DB để lưu vào session (giá, tên, ảnh)
             $productModel = new Product($this->db);
             $product = $productModel->findById($product_id);
 
-            // Tìm size text dựa vào variant_id (nếu cần chi tiết)
             $size_text = "Free Size";
             foreach($product['variants'] as $v) {
                 if($v['id'] == $variant_id) $size_text = $v['size'];
@@ -38,11 +36,9 @@ class CartController {
                 'quantity' => $quantity
             ];
 
-            // Logic thêm vào session cart
             if (!isset($_SESSION['cart'])) {
                 $_SESSION['cart'] = [];
             }
-            // (Ở đây làm đơn giản: cứ thêm mới, bạn có thể code thêm check trùng ID để cộng dồn số lượng)
             $_SESSION['cart'][] = $cart_item;
 
             header("Location: index.php?controller=cart&action=index");
@@ -52,7 +48,6 @@ class CartController {
     public function index() {
         $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
         
-        // Tính tổng tiền
         $total = 0;
         foreach($cart as $item) {
             $total += $item['price'] * $item['quantity'];
@@ -73,19 +68,16 @@ class CartController {
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Kiểm tra xem có sản phẩm nào được chọn không
         if (empty($_POST['selected_items'])) {
-            // Nếu không chọn gì mà cố tình submit (trường hợp hiếm vì JS đã chặn)
             header("Location: index.php?controller=cart&action=index");
             exit();
         }
 
-        $selected_indices = $_POST['selected_items']; // Mảng chứa index: [0, 2, ...]
+        $selected_indices = $_POST['selected_items'];
         $cart_session = $_SESSION['cart'] ?? [];
         
         $items_to_buy = [];
         
-        // Lọc ra các sản phẩm cần mua
         foreach ($selected_indices as $index) {
             if (isset($cart_session[$index])) {
                 $items_to_buy[] = $cart_session[$index];
@@ -96,7 +88,6 @@ class CartController {
             die("Lỗi: Không tìm thấy sản phẩm trong giỏ.");
         }
 
-        // Tạo đơn hàng
         $orderModel = new Order($this->db);
         $customer_info = [
             'fullname' => $_POST['fullname'],
@@ -108,17 +99,12 @@ class CartController {
         $order_id = $orderModel->create($_SESSION['user_id'], $customer_info, $items_to_buy);
 
         if ($order_id) {
-            // ---- QUAN TRỌNG: CHỈ XÓA NHỮNG MÓN ĐÃ MUA KHỎI SESSION ----
-            
-            // Duyệt qua danh sách index đã chọn và unset khỏi session gốc
             foreach ($selected_indices as $index) {
                 unset($_SESSION['cart'][$index]);
             }
             
-            // Sắp xếp lại mảng giỏ hàng để không bị lủng lỗ index
             $_SESSION['cart'] = array_values($_SESSION['cart']);
 
-            // Chuyển hướng thành công
             header("Location: index.php?controller=order&action=history&status=order_success");
             exit();
         } else {
@@ -127,7 +113,6 @@ class CartController {
     }
     }
     
-    // Xóa giỏ hàng
     public function clear() {
         unset($_SESSION['cart']);
         header("Location: index.php?controller=cart&action=index");
@@ -141,7 +126,6 @@ class CartController {
         $_SESSION['cart'] = array_values($_SESSION['cart']);
     }
 
-    // Quay lại trang giỏ hàng
     header("Location: index.php?controller=cart&action=index");
     exit();
 }

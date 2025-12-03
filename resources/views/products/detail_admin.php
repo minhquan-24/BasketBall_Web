@@ -1,5 +1,4 @@
 <div class="row">
-    <!-- Cột bên trái: Hình ảnh sản phẩm (Giữ nguyên) -->
     <div class="col-md-7">
         <?php 
             $primary_image = 'https://via.placeholder.com/800x600?text=No+Image';
@@ -27,7 +26,6 @@
         </div>
     </div>
 
-    <!-- Cột bên phải: Thông tin -->
     <div class="col-md-5">
         <h2><?php echo htmlspecialchars($product['name']); ?></h2>
         <p class="text-muted">Nhà sản xuất: <strong><?php echo htmlspecialchars($product['manufacturer']); ?></strong></p>
@@ -41,7 +39,6 @@
         <p><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
         <hr>
         
-        <!-- Bảng quản lý kho hàng DÀNH RIÊNG cho Admin -->
         <div class="p-3 mb-2 bg-light rounded border">
             <h5 class="mb-3"><i class="bi bi-box-seam me-2"></i>Thông tin Kho hàng</h5>
             <?php if (!empty($product['variants'])): ?>
@@ -81,7 +78,6 @@ function changeImage(newSrc) {
     document.getElementById('main-product-image').src = newSrc;
 }
     document.addEventListener('DOMContentLoaded', function() {
-        // Lấy các element cần thiết bằng ID
         const sizeSelect = document.getElementById('size-select');
         const quantityInput = document.getElementById('quantity-input');
         const addToCartBtn = document.getElementById('add-to-cart-btn');
@@ -97,7 +93,6 @@ function changeImage(newSrc) {
                     quantityInput.disabled = false;
                     addToCartBtn.disabled = false;
                 } else {
-                    // Vô hiệu hóa ô số lượng và nút bấm
                     quantityInput.disabled = true;
                     addToCartBtn.disabled = true;
                     quantityInput.value = 1;

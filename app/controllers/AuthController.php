@@ -21,13 +21,11 @@ class AuthController {
             return;
         }
 
-        // --- Logic xử lý từ case 'register' ---
         $errors = [];
         $this->userModel->name = $_POST['name'] ?? '';
         $this->userModel->email = $_POST['email'] ?? '';
         $this->userModel->password = $_POST['password'] ?? '';
         
-        // ... (phần validation giữ nguyên) ...
         if (empty($this->userModel->name)) {
                 $errors[] = 'Họ và tên là bắt buộc.';
             }
@@ -47,7 +45,6 @@ class AuthController {
             }
         }
         
-        // Nếu có lỗi, hiển thị lại form với lỗi
         require '../resources/views/layouts/header.php';
         require '../resources/views/auth/register.php';
         require '../resources/views/layouts/footer.php';

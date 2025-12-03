@@ -1,7 +1,6 @@
 <h1>Modify Product</h1>
 
 <form action="index.php?area=admin&controller=product&action=update" method="POST">
-    <!-- Trường ẩn để gửi ID của sản phẩm cần cập nhật -->
     <input type="hidden" name="id" value="<?php echo $this->productModel->id; ?>">
 
     <div class="row">
@@ -52,13 +51,11 @@
         </div>
         <hr>
 
-        <!-- **** BẮT ĐẦU KHỐI CODE MỚI CẦN THÊM VÀO **** -->
         <h4>Quản lý Size và Số lượng</h4>
         <div id="variants-container">
             <?php if (!empty($product_variants)): ?>
                 <?php foreach ($product_variants as $variant): ?>
                     <div class="row align-items-center mb-2 variant-row">
-                    <!-- Trường ẩn để lưu ID của variant đã có -->
                         <input type="hidden" name="variants[id][]" value="<?php echo $variant['id']; ?>">
                         <div class="col-md-4">
                             <label class="form-label">Size</label>
@@ -74,9 +71,9 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
-            <?php else: // Nếu sản phẩm chưa có variant, hiển thị một dòng trống để nhập ?>
+            <?php else:  ?>
             <div class="row align-items-center mb-2 variant-row">
-                <input type="hidden" name="variants[id][]" value=""> <!-- ID rỗng cho variant mới -->
+                <input type="hidden" name="variants[id][]" value=""> 
                 <div class="col-md-4">
                     <label class="form-label">Size</label>
                     <input type="text" class="form-control" name="variants[size][]">
@@ -93,7 +90,6 @@
             <?php endif; ?>
         </div>
         <button type="button" id="add-variant-btn" class="btn btn-secondary btn-sm mt-2"><i class="bi bi-plus-circle"></i> Thêm Size khác</button>
-        <!-- **** KẾT THÚC KHỐI CODE MỚI **** -->
         <hr>
     </div>
     <button type="submit" class="btn btn-success">Update</button>
@@ -104,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('variants-container');
     const addButton = document.getElementById('add-variant-btn');
 
-    // Tạo một dòng mẫu để nhân bản (quan trọng cho trường hợp sản phẩm chưa có variant nào)
     const emptyRowHTML = `
         <div class="row align-items-center mb-2 variant-row">
             <input type="hidden" name="variants[id][]" value="">
@@ -131,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
              if (container.querySelectorAll('.variant-row').length > 1) {
                 event.target.closest('.variant-row').remove();
             } else {
-                // Nếu chỉ còn 1 dòng, không xóa mà chỉ reset giá trị
                 const lastRow = container.querySelector('.variant-row');
                 lastRow.querySelector('input[name="variants[id][]"]').value = '';
                 lastRow.querySelector('input[name="variants[size][]"]').value = '';

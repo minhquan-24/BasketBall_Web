@@ -11,7 +11,7 @@ class Product {
     public $image_url;
     public $category_id;
     public $created_at;
-    public $category_name; // Thuộc tính thêm để chứa tên danh mục từ JOIN
+    public $category_name;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -131,17 +131,14 @@ class Product {
         WHERE 1=1 
     ";
     
-    // Logic lọc: Nếu có category_id thì thêm điều kiện
     if ($category_id !== null) {
         $query .= " AND p.category_id = :category_id";
     }
 
-    // LOGIC MỚI: Nếu có keyword thì thêm điều kiện tìm tên
     if ($keyword !== null) {
         $query .= " AND p.name LIKE :keyword";
     }
 
-    // Logic sắp xếp (giữ nguyên)
     switch ($sort) {
         case 'price_asc': $order_by = "p.price ASC"; break;
         case 'price_desc': $order_by = "p.price DESC"; break;
@@ -151,7 +148,6 @@ class Product {
 
     $stmt = $this->conn->prepare($query);
 
-    // Bind giá trị
     if ($category_id !== null) $stmt->bindParam(":category_id", $category_id);
     if ($keyword !== null) {
         $searchTerm = "%{$keyword}%";
@@ -165,7 +161,6 @@ class Product {
     return $stmt;
 }
 
-// 2. Sửa hàm count: Cũng phải đếm theo keyword
 public function count($category_id = null, $keyword = null) {
     $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name . " WHERE 1=1";
     
@@ -186,7 +181,6 @@ public function count($category_id = null, $keyword = null) {
 }
 
     public function findById($id) {
-        // 1. Lấy thông tin sản phẩm chính
         $query = "
             SELECT p.*, c.name as category_name
             FROM " . $this->table_name . " p
@@ -200,17 +194,15 @@ public function count($category_id = null, $keyword = null) {
         $product_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$product_data) {
-            return false; // Không tìm thấy sản phẩm
+            return false; 
         }
 
-        // 2. Lấy tất cả hình ảnh của sản phẩm
         $query_images = "SELECT * FROM product_images WHERE product_id = ?";
         $stmt_images = $this->conn->prepare($query_images);
         $stmt_images->bindParam(1, $id);
         $stmt_images->execute();
         $product_data['images'] = $stmt_images->fetchAll(PDO::FETCH_ASSOC);
         
-        // 3. Lấy tất cả size và số lượng của sản phẩm
         $query_variants = "SELECT * FROM product_variants WHERE product_id = ? AND quantity > 0 ORDER BY size ASC";
         $stmt_variants = $this->conn->prepare($query_variants);
         $stmt_variants->bindParam(1, $id);
@@ -227,7 +219,6 @@ public function count($category_id = null, $keyword = null) {
         
         $stmt = $this->conn->prepare($query);
 
-        // Làm sạch dữ liệu (ví dụ)
         $this->name = htmlspecialchars(strip_tags($this->name));
         $this->description = htmlspecialchars(strip_tags($this->description));
         $this->price = htmlspecialchars(strip_tags($this->price));
@@ -237,7 +228,6 @@ public function count($category_id = null, $keyword = null) {
         $this->image_url = htmlspecialchars(strip_tags($this->image_url));
 
 
-        // Gán dữ liệu
         $stmt->bindParam(":name", $this->name);
         $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":price", $this->price);
@@ -247,7 +237,6 @@ public function count($category_id = null, $keyword = null) {
         $stmt->bindParam(":image_url", $this->image_url);
 
         if ($stmt->execute()) {
-            // Lấy ID của sản phẩm vừa được tạo (hữu ích cho các bước sau này)
             $this->id = $this->conn->lastInsertId();
             return true;
         }
@@ -262,7 +251,6 @@ public function count($category_id = null, $keyword = null) {
         
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($row) {
-            // Gán dữ liệu từ DB vào các thuộc tính của đối tượng
             $this->name = $row['name'];
             $this->description = $row['description'];
             $this->price = $row['price'];
@@ -275,10 +263,7 @@ public function count($category_id = null, $keyword = null) {
         return false;
     }
 
-    /**
-     * Cập nhật thông tin một sản phẩm trong database.
-     * @return bool True nếu thành công, False nếu thất bại.
-     */
+    
     public function update() {
         $query = "UPDATE " . $this->table_name . "
                   SET name = :name, description = :description, price = :price, 
@@ -288,12 +273,15 @@ public function count($category_id = null, $keyword = null) {
 
         $stmt = $this->conn->prepare($query);
 
-        // Làm sạch dữ liệu
         $this->name = htmlspecialchars(strip_tags($this->name));
-        // ... làm tương tự cho các thuộc tính khác ...
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->price = htmlspecialchars(strip_tags($this->price));
+        $this->manufacturer = htmlspecialchars(strip_tags($this->manufacturer));
+        $this->usage_type = htmlspecialchars(strip_tags($this->usage_type));
+        $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+        $this->image_url = htmlspecialchars(strip_tags($this->image_url));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
-        // Gán dữ liệu
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':price', $this->price);
@@ -324,72 +312,54 @@ public function count($category_id = null, $keyword = null) {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Xử lý đồng bộ (thêm, sửa, xóa) các variant của một sản phẩm.
-     * @param array $variantsData Dữ liệu variants gửi từ form.
-     * @return bool
-     */
+    
     public function syncVariants($variantsData) {
         $this->conn->beginTransaction();
         try {
-            // ---- BƯỚC A: LẤY TẤT CẢ ID VARIANT HIỆN CÓ TRONG DATABASE ----
             $stmt_get_ids = $this->conn->prepare("SELECT id FROM product_variants WHERE product_id = ?");
             $stmt_get_ids->execute([$this->id]);
-            // PDO::FETCH_COLUMN lấy ra một cột duy nhất dưới dạng mảng phẳng
             $ids_in_db = $stmt_get_ids->fetchAll(PDO::FETCH_COLUMN);
 
-            $ids_from_form = []; // Mảng để lưu các ID được gửi lên từ form
+            $ids_from_form = []; 
 
-            // ---- BƯỚC B: LẶP QUA DỮ LIỆU FORM ĐỂ THÊM (INSERT) HOẶC SỬA (UPDATE) ----
             if (!empty($variantsData['size'])) {
                 foreach ($variantsData['size'] as $index => $size) {
                     $quantity = $variantsData['quantity'][$index];
                     $variantId = $variantsData['id'][$index] ?? null;
 
-                    // Chỉ xử lý những dòng có nhập size
                     if (empty(trim($size))) {
                         continue;
                     }
                     
-                    if (!empty($variantId)) { // ---- UPDATE ----
-                        // Nếu có ID, thực hiện cập nhật
+                    if (!empty($variantId)) { 
                         $stmt_update = $this->conn->prepare("UPDATE product_variants SET size = ?, quantity = ? WHERE id = ? AND product_id = ?");
                         $stmt_update->execute([$size, $quantity, $variantId, $this->id]);
-                        // Lưu lại ID này
                         $ids_from_form[] = $variantId;
-                    } else { // ---- INSERT ----
-                        // Nếu không có ID, thực hiện thêm mới
+                    } else { 
                         $stmt_insert = $this->conn->prepare("INSERT INTO product_variants (product_id, size, quantity) VALUES (?, ?, ?)");
                         $stmt_insert->execute([$this->id, $size, $quantity]);
-                        // Lưu lại ID vừa được tạo mới
                         $ids_from_form[] = $this->conn->lastInsertId();
                     }
                 }
             }
             
-            // ---- BƯỚC C: SO SÁNH VÀ XÓA (DELETE) ----
-            // array_diff(A, B) sẽ trả về các phần tử có trong A nhưng không có trong B.
+            
             $ids_to_delete = array_diff($ids_in_db, $ids_from_form);
 
             if (!empty($ids_to_delete)) {
-                // Tạo chuỗi placeholder (?,?,?) cho câu lệnh IN
                 $placeholders = implode(',', array_fill(0, count($ids_to_delete), '?'));
                 $stmt_delete = $this->conn->prepare("DELETE FROM product_variants WHERE id IN ({$placeholders}) AND product_id = ?");
                 
-                // Gán các giá trị ID cần xóa và ID sản phẩm
                 $params = array_values($ids_to_delete);
                 $params[] = $this->id;
 
                 $stmt_delete->execute($params);
             }
 
-            // Nếu tất cả các bước trên không có lỗi, xác nhận thay đổi
             $this->conn->commit();
             return true;
         } catch (Exception $e) {
-            // Nếu có bất kỳ lỗi nào, hủy bỏ tất cả thay đổi
             $this->conn->rollBack();
-            // (Tùy chọn) Ghi lại lỗi để debug: error_log($e->getMessage());
             return false;
         }
     }
