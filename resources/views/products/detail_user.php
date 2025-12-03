@@ -1,5 +1,4 @@
 <div class="row">
-    <!-- Cột bên trái: Hình ảnh sản phẩm (Giữ nguyên không đổi) -->
     <div class="col-md-7">
         <?php 
             $primary_image = 'https://via.placeholder.com/800x600?text=No+Image';
@@ -15,7 +14,12 @@
                 }
             }
         ?>
-        <img id="main-product-image" src="<?php echo htmlspecialchars($primary_image); ?>" class="img-fluid rounded mb-3" alt="<?php echo htmlspecialchars($product['name']); ?>">
+        <img id="main-product-image" 
+            src="<?php echo htmlspecialchars($primary_image); ?>" 
+            class="img-fluid rounded mb-3" 
+            alt="<?php echo htmlspecialchars($product['name']); ?>"      
+            style="max-height: 500px; width: 100%; object-fit: contain; background-color: #f8f9fa;"
+        >
         
         <div class="row">
             <?php foreach ($product['images'] as $image): ?>

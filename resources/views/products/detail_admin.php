@@ -12,7 +12,12 @@
                 }
             }
         ?>
-        <img id="main-product-image" src="<?php echo htmlspecialchars($primary_image); ?>" class="img-fluid rounded mb-3" alt="<?php echo htmlspecialchars($product['name']); ?>">
+        <img 
+            id="main-product-image" 
+            src="<?php echo htmlspecialchars($primary_image); ?>" 
+            class="img-fluid rounded mb-3" alt="<?php echo htmlspecialchars($product['name']); ?>"
+            style="max-height: 500px; width: 100%; object-fit: contain; background-color: #f8f9fa;"
+        >
         <div class="row">
             <?php foreach ($product['images'] as $image): ?>
                 <div class="col-3">
@@ -48,7 +53,7 @@
                         <?php foreach($product['variants'] as $variant): ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($variant['size']); ?></td>
-                                <td><?php echo $variant['quantity']; ?> đôi</td>
+                                <td><?php echo $variant['quantity']; ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
