@@ -2,6 +2,85 @@ body {
     font-family: sans-serif;
 }
 
+.home-hero {
+    background: linear-gradient(120deg, #171717 0%, #343434 62%, #e85b32 62%);
+    color: #fff;
+}
+
+.home-shoe-window {
+    overflow: hidden;
+    padding: 8px 4px 18px;
+}
+
+.home-shoe-track {
+    display: flex;
+    width: max-content;
+    gap: 16px;
+    animation: home-slide 28s linear infinite;
+}
+
+.home-shoe-window:hover .home-shoe-track {
+    animation-play-state: paused;
+}
+
+.home-shoe-card {
+    width: 220px;
+    height: 255px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 14px;
+    color: #171717;
+    background: #f3f0e9;
+    border: 1px solid #e1ddd5;
+    text-decoration: none;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.home-shoe-card:hover {
+    color: #171717;
+    transform: translateY(-8px) rotate(-1deg);
+    box-shadow: 0 16px 28px rgba(0, 0, 0, .16);
+}
+
+.home-shoe-card img {
+    width: 100%;
+    height: 205px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 6px rgba(0, 0, 0, .2));
+    transition: transform .25s ease;
+}
+
+.home-shoe-card:hover img {
+    transform: scale(1.08) rotate(-4deg);
+}
+
+@keyframes home-slide {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 8px)); }
+}
+
+@media (max-width: 576px) {
+    .home-hero {
+        background: linear-gradient(155deg, #171717 0%, #343434 70%, #e85b32 70%);
+    }
+
+    .home-shoe-card {
+        width: 180px;
+        height: 220px;
+    }
+
+    .home-shoe-card img {
+        height: 170px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-shoe-track {
+        animation: none;
+    }
+}
+
 .product-image-container {
     height: 200px;
     background-color: #f8f9fa;
