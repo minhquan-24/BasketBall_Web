@@ -1,21 +1,1008 @@
-body {
-    font-family: sans-serif;
+/* ==========================================================================
+   BASKETBALL4LIFE - CORE THEME & MOTION STYLESHEET
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap');
+
+:root {
+    --bb-orange: #ff5722;
+    --bb-orange-hover: #f44336;
+    --bb-orange-glow: rgba(255, 87, 34, 0.45);
+    --bb-gold: #ffb703;
+    --bb-dark: #11141a;
+    --bb-dark-card: #181d26;
+    --bb-dark-surface: #222834;
+    --bb-court-wood: #c68642;
+    --bb-court-line: rgba(255, 255, 255, 0.15);
+    --bb-text-light: #f8fafc;
+    --bb-text-muted: #94a3b8;
+    --bb-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --bb-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --bb-shadow-md: 0 10px 25px rgba(0, 0, 0, 0.14);
+    --bb-shadow-glow: 0 0 25px rgba(255, 87, 34, 0.35);
 }
 
-.home-hero {
-    background: linear-gradient(120deg, #171717 0%, #343434 62%, #e85b32 62%);
+body {
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1e293b;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   1. KEYFRAME ANIMATIONS (MOTION EFFECTS)
+   ========================================================================== */
+
+/* Dribble / Bounce physics for basketball */
+@keyframes ballBounce {
+    0%, 100% {
+        transform: translateY(0) scale(1, 1);
+        animation-timing-function: cubic-bezier(0.3, 0.0, 0.8, 0.4);
+    }
+    45% {
+        transform: translateY(-45px) scale(0.98, 1.05);
+        animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1.0);
+    }
+    92% {
+        transform: translateY(0) scale(1.08, 0.92);
+    }
+}
+
+/* Shadow sync with bouncing ball */
+@keyframes ballShadow {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    45% {
+        transform: scale(0.6);
+        opacity: 0.25;
+    }
+    92% {
+        transform: scale(1.15);
+        opacity: 0.85;
+    }
+}
+
+/* Gentle floating for badges, mascot, items */
+@keyframes floatGentle {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(1deg);
+    }
+}
+
+@keyframes floatReverse {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(8px) rotate(-1.5deg);
+    }
+}
+
+/* Continuous 360 rotation */
+@keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Court circle rotation with dashed line */
+@keyframes courtOrbit {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Pulse glow for badges and live tags */
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 87, 34, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(255, 87, 34, 0);
+    }
+}
+
+/* Light glare sweep effect on buttons and featured cards */
+@keyframes shineSweep {
+    0% { left: -120%; }
+    20%, 100% { left: 140%; }
+}
+
+/* Infinite Marquee Scroll */
+@keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Mascot breathing & horn glow */
+@keyframes mascotBreath {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-4px) scale(1.02); }
+}
+
+@keyframes eyeGlow {
+    0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 4px #ff5722); }
+    50% { opacity: 1; filter: drop-shadow(0 0 10px #ffb703); }
+}
+
+/* Interactive shooting shot arc animation */
+@keyframes shootArc {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    40% {
+        transform: translate(110px, -150px) scale(0.9) rotate(360deg);
+    }
+    75% {
+        transform: translate(220px, -100px) scale(0.75) rotate(720deg);
+        opacity: 1;
+    }
+    90% {
+        transform: translate(245px, -30px) scale(0.65) rotate(840deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(245px, 20px) scale(0.55) rotate(900deg);
+        opacity: 0;
+    }
+}
+
+/* Hoop ripple / net swish effect */
+@keyframes netSwish {
+    0%, 100% { transform: scaleX(1); }
+    30% { transform: scaleX(1.3) skewX(8deg); }
+    60% { transform: scaleX(0.85) skewX(-6deg); }
+    80% { transform: scaleX(1.1); }
+}
+
+/* ==========================================================================
+   2. HERO SECTION
+   ========================================================================== */
+
+.hero-court-section {
+    position: relative;
+    background: radial-gradient(circle at 80% 20%, #2a3346 0%, #171d28 45%, #0f131a 100%);
     color: #fff;
+    border-radius: 24px;
+    padding: 3.5rem 2.5rem;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Basketball Court Watermark in Hero */
+.hero-court-section::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 480px;
+    height: 480px;
+    border: 2px dashed rgba(255, 255, 255, 0.07);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-court-section::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: 20%;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(255, 87, 34, 0.18) 0%, rgba(255, 87, 34, 0) 70%);
+    filter: blur(40px);
+    pointer-events: none;
+}
+
+.hero-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 87, 34, 0.15);
+    border: 1px solid rgba(255, 87, 34, 0.4);
+    color: #ff9e80;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--bb-orange);
+    border-radius: 50%;
+    animation: pulseGlow 1.8s infinite;
+}
+
+.hero-title {
+    font-size: 2.75rem;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+}
+
+.text-gradient-orange {
+    background: linear-gradient(135deg, #ff7043 0%, #ff5722 50%, #ffb703 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.hero-desc {
+    color: #cbd5e1;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 520px;
+}
+
+/* Shining Action Buttons */
+.btn-bb-primary {
+    position: relative;
+    background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%);
+    color: #fff;
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 8px 20px var(--bb-orange-glow);
+    overflow: hidden;
+    transition: var(--bb-transition);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-bb-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: skewX(-20deg);
+    animation: shineSweep 4s infinite;
+}
+
+.btn-bb-primary:hover {
+    color: #fff;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(255, 87, 34, 0.6);
+}
+
+.btn-bb-outline {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 50px;
+    transition: var(--bb-transition);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(8px);
+}
+
+.btn-bb-outline:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+}
+
+/* Quick Hero Stats */
+.hero-stats-row {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 1.25rem;
+    margin-top: 2rem;
+}
+
+.hero-stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-stat-num {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #ff9e80;
+    line-height: 1.2;
+}
+
+.hero-stat-label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Hero Right: Interactive Motion Stage */
+.hero-visual-stage {
+    position: relative;
+    width: 100%;
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.court-orbit-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 320px;
+    height: 320px;
+    border: 2px dashed rgba(255, 87, 34, 0.35);
+    border-radius: 50%;
+    animation: courtOrbit 30s linear infinite;
+    pointer-events: none;
+}
+
+.court-orbit-ring::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 45%;
+    width: 12px;
+    height: 12px;
+    background: var(--bb-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--bb-gold);
+}
+
+/* Floating Hero Sneaker */
+.hero-main-shoe-wrap {
+    position: relative;
+    z-index: 2;
+    animation: floatGentle 4.5s ease-in-out infinite;
+}
+
+.hero-main-shoe-img {
+    max-width: 330px;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.55));
+    transition: transform 0.4s ease;
+}
+
+.hero-main-shoe-wrap:hover .hero-main-shoe-img {
+    transform: scale(1.08) rotate(-4deg);
+}
+
+/* Floating Badges */
+.floating-pill {
+    position: absolute;
+    background: rgba(17, 20, 26, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.floating-pill-1 {
+    top: 15px;
+    left: 10px;
+    animation: floatReverse 4s ease-in-out infinite;
+}
+
+.floating-pill-2 {
+    bottom: 25px;
+    right: 15px;
+    animation: floatGentle 5s ease-in-out infinite 0.5s;
+}
+
+/* Interactive Hoop & Mini Shoot Game in Hero */
+.interactive-shoot-box {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    z-index: 4;
+}
+
+.mini-hoop {
+    position: relative;
+    width: 70px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hoop-backboard {
+    width: 65px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hoop-backboard::after {
+    content: '';
+    width: 25px;
+    height: 18px;
+    border: 2px solid #ff5722;
+    border-radius: 2px;
+}
+
+.hoop-rim {
+    width: 32px;
+    height: 8px;
+    border: 3px solid #ff5722;
+    border-radius: 50%;
+    margin-top: -4px;
+    position: relative;
+    z-index: 2;
+}
+
+.hoop-net {
+    width: 24px;
+    height: 22px;
+    border-left: 2px dashed rgba(255, 255, 255, 0.8);
+    border-right: 2px dashed rgba(255, 255, 255, 0.8);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
+    background: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,0.2) 3px, rgba(255,255,255,0.2) 6px);
+    transition: transform 0.2s ease;
+}
+
+.hoop-net.swish {
+    animation: netSwish 0.6s ease-in-out;
+}
+
+/* Interactive Bouncing Ball */
+.interactive-ball-wrap {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    z-index: 5;
+    cursor: pointer;
+    text-align: center;
+}
+
+.interactive-ball {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ff8a65 0%, #e64a19 60%, #bf360c 100%);
+    position: relative;
+    box-shadow: inset -4px -4px 8px rgba(0, 0, 0, 0.4), inset 3px 3px 6px rgba(255, 255, 255, 0.4);
+    animation: ballBounce 1.4s infinite;
+    transition: all 0.3s ease;
+}
+
+/* Basketball Seams */
+.interactive-ball::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.5);
+    transform: translateY(-50%);
+}
+
+.interactive-ball::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    transform: translateX(-50%);
+}
+
+.ball-shadow {
+    width: 48px;
+    height: 10px;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 50%;
+    margin: 4px auto 0;
+    filter: blur(3px);
+    animation: ballShadow 1.4s infinite;
+}
+
+.shoot-hint {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--bb-gold);
+    margin-top: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2px 8px;
+    border-radius: 12px;
+    white-space: nowrap;
+    animation: floatGentle 2.5s infinite;
+}
+
+.interactive-ball.shooting {
+    animation: shootArc 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) forwards !important;
+}
+
+.score-toast {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    background: linear-gradient(135deg, #ffb703, #ff5722);
+    color: #111;
+    font-weight: 900;
+    font-size: 0.95rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(255, 87, 34, 0.6);
+    opacity: 0;
+    transform: translateY(10px) scale(0.7);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.score-toast.active {
+    opacity: 1;
+    transform: translateY(-15px) scale(1.1);
+}
+
+/* ==========================================================================
+   3. MARQUEE TICKER (INFINITE MOTION)
+   ========================================================================== */
+
+.bb-marquee-wrapper {
+    background: #11141a;
+    border-radius: 14px;
+    padding: 12px 0;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    margin: 2rem 0;
+    border: 1px solid rgba(255, 87, 34, 0.25);
+}
+
+.bb-marquee-track {
+    display: flex;
+    width: max-content;
+    white-space: nowrap;
+    animation: marqueeScroll 25s linear infinite;
+}
+
+.bb-marquee-wrapper:hover .bb-marquee-track {
+    animation-play-state: paused;
+}
+
+.bb-marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 28px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.bb-marquee-item i {
+    color: var(--bb-orange);
+    font-size: 1.1rem;
+}
+
+.bb-marquee-item .gold-star {
+    color: var(--bb-gold);
+}
+
+/* ==========================================================================
+   4. MASCOT ARENA & INTERACTIVE PLAYSTYLE SECTION
+   ========================================================================== */
+
+.mascot-court-banner {
+    background: linear-gradient(135deg, #181d26 0%, #202735 60%, #2c1a16 100%);
+    border-radius: 20px;
+    padding: 2.2rem 2rem;
+    color: #fff;
+    border: 1px solid rgba(255, 87, 34, 0.3);
+    box-shadow: var(--bb-shadow-md);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
+
+.mascot-court-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(255, 87, 34, 0.15) 0%, transparent 70%);
+    filter: blur(50px);
+}
+
+/* Mascot SVG Container & Motion */
+.mascot-avatar-wrap {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mascot-svg {
+    width: 100%;
+    height: 100%;
+    animation: mascotBreath 3.5s ease-in-out infinite;
+    filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.4));
+    transition: transform 0.3s ease;
+}
+
+.mascot-svg:hover {
+    transform: scale(1.08) rotate(2deg);
+}
+
+.mascot-eye {
+    animation: eyeGlow 2.5s infinite;
+}
+
+.mascot-spinning-ball {
+    transform-origin: 135px 45px;
+    animation: spinSlow 3s linear infinite;
+}
+
+/* Interactive Speech Bubble */
+.mascot-speech-bubble {
+    position: relative;
+    background: #fff;
+    color: #1e293b;
+    padding: 18px 22px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.mascot-speech-bubble::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 30px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 12px solid #fff;
+}
+
+@media (max-width: 768px) {
+    .mascot-speech-bubble::before {
+        left: 50%;
+        top: -12px;
+        transform: translateX(-50%);
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 12px solid #fff;
+        border-top: none;
+    }
+}
+
+.playstyle-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.btn-playstyle {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--bb-transition);
+}
+
+.btn-playstyle:hover,
+.btn-playstyle.active {
+    background: var(--bb-orange);
+    color: #fff;
+    border-color: var(--bb-orange);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px var(--bb-orange-glow);
+}
+
+/* ==========================================================================
+   5. FEATURED CATEGORIES
+   ========================================================================== */
+
+.category-card {
+    position: relative;
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--bb-shadow-sm);
+    transition: var(--bb-transition);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+.category-card:hover {
+    color: inherit;
+    transform: translateY(-8px);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+    border-color: var(--bb-orange);
+}
+
+.category-card-img-wrap {
+    height: 160px;
+    background: radial-gradient(circle at center, #f1f5f9 0%, #e2e8f0 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.category-card-img-wrap img {
+    height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.15));
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.category-card:hover .category-card-img-wrap img {
+    transform: scale(1.12) rotate(-5deg);
+}
+
+.category-card-body {
+    padding: 16px;
+}
+
+.category-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--bb-orange);
+    letter-spacing: 0.5px;
+}
+
+.category-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin: 4px 0 6px;
+}
+
+.category-action-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--bb-transition);
+}
+
+.category-card:hover .category-action-link {
+    color: var(--bb-orange);
+    transform: translateX(4px);
+}
+
+/* ==========================================================================
+   6. BEST-SELLERS & PRODUCT CARDS
+   ========================================================================== */
+
+.section-head-title {
+    font-size: 1.85rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    margin-bottom: 0;
+}
+
+.section-sub-badge {
+    color: var(--bb-orange);
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.product-sport-card {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #e9ecef;
+    box-shadow: var(--bb-shadow-sm);
+    transition: var(--bb-transition);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+}
+
+.product-sport-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.12);
+    border-color: #cbd5e1;
+}
+
+.product-sport-card .product-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #11141a;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 30px;
+    z-index: 2;
+    letter-spacing: 0.5px;
+}
+
+.product-sport-card .product-badge.badge-hot {
+    background: linear-gradient(135deg, #ff5722, #f44336);
+}
+
+.product-image-container {
+    height: 210px;
+    background: radial-gradient(circle at center, #fafafa 0%, #f1f3f5 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 16px;
+    overflow: hidden;
+}
+
+.product-image-container .card-img-top {
+    max-height: 175px;
+    width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.12));
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.product-sport-card:hover .card-img-top {
+    transform: scale(1.1) rotate(-3deg);
+}
+
+.product-sport-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.product-category-chip {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.product-card-title {
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.35;
+    margin-bottom: 8px;
+}
+
+.product-card-title a {
+    color: #0f172a;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.product-card-title a:hover {
+    color: var(--bb-orange);
+}
+
+.rating-stars {
+    color: #f59e0b;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+}
+
+.product-price-tag {
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: var(--bb-orange);
+    margin-top: auto;
+    margin-bottom: 12px;
+}
+
+.btn-card-action {
+    background: #11141a;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    padding: 8px 14px;
+    transition: var(--bb-transition);
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+}
+
+.btn-card-action:hover {
+    background: var(--bb-orange);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px var(--bb-orange-glow);
+}
+
+/* ==========================================================================
+   7. COURT BALL SHOWCASE (UPGRADED SLIDER)
+   ========================================================================== */
+
+.home-shoe-showcase {
+    background: #11141a;
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    color: #fff;
+    margin: 3.5rem 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 87, 34, 0.2);
+}
+
+.home-shoe-showcase::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    right: 10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 87, 34, 0.12) 0%, transparent 70%);
+    filter: blur(40px);
 }
 
 .home-shoe-window {
     overflow: hidden;
-    padding: 8px 4px 18px;
+    padding: 14px 4px 20px;
+    position: relative;
 }
 
 .home-shoe-track {
     display: flex;
     width: max-content;
-    gap: 16px;
+    gap: 20px;
     animation: home-slide 28s linear infinite;
 }
 
@@ -24,80 +1011,265 @@ body {
 }
 
 .home-shoe-card {
-    width: 220px;
-    height: 255px;
+    width: 230px;
+    height: 280px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 14px;
-    color: #171717;
-    background: #f3f0e9;
-    border: 1px solid #e1ddd5;
+    padding: 18px;
+    color: #fff;
+    background: #1c222c;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
     text-decoration: none;
-    transition: transform .25s ease, box-shadow .25s ease;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.home-shoe-card::before {
+    content: '';
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 25px;
+    background: radial-gradient(ellipse, rgba(255, 87, 34, 0.35) 0%, transparent 75%);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .home-shoe-card:hover {
-    color: #171717;
-    transform: translateY(-8px) rotate(-1deg);
-    box-shadow: 0 16px 28px rgba(0, 0, 0, .16);
+    color: #fff;
+    transform: translateY(-10px) rotate(-1deg);
+    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35), 0 0 20px rgba(255, 87, 34, 0.25);
+    border-color: var(--bb-orange);
 }
 
 .home-shoe-card img {
     width: 100%;
-    height: 205px;
+    height: 180px;
     object-fit: contain;
-    filter: drop-shadow(0 10px 6px rgba(0, 0, 0, .2));
-    transition: transform .25s ease;
+    filter: drop-shadow(0 12px 8px rgba(0, 0, 0, 0.35));
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
 }
 
 .home-shoe-card:hover img {
-    transform: scale(1.08) rotate(-4deg);
+    transform: scale(1.12) rotate(12deg);
+}
+
+.home-shoe-card .shoe-info-badge {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-shoe-card strong {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.home-shoe-card .shoe-spec {
+    font-size: 0.72rem;
+    color: #94a3b8;
 }
 
 @keyframes home-slide {
     from { transform: translateX(0); }
-    to { transform: translateX(calc(-50% - 8px)); }
+    to { transform: translateX(calc(-50% - 10px)); }
+}
+
+/* ==========================================================================
+   8. COURT PERKS & BENEFITS
+   ========================================================================== */
+
+.perk-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 24px 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: var(--bb-shadow-sm);
+    transition: var(--bb-transition);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    height: 100%;
+}
+
+.perk-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--bb-shadow-md);
+    border-color: var(--bb-orange);
+}
+
+.perk-icon-wrap {
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 87, 34, 0.1);
+    color: var(--bb-orange);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    transition: var(--bb-transition);
+}
+
+.perk-card:hover .perk-icon-wrap {
+    background: var(--bb-orange);
+    color: #fff;
+    transform: scale(1.1) rotate(6deg);
+}
+
+.perk-title {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: #0f172a;
+}
+
+.perk-desc {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 0;
+    line-height: 1.45;
+}
+
+/* ==========================================================================
+   9. VIP CLUB / CTA BANNER
+   ========================================================================== */
+
+.vip-court-banner {
+    position: relative;
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #2b1712 100%);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 87, 34, 0.35);
+    margin: 3.5rem 0 1rem;
+}
+
+.vip-court-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 87, 34, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.vip-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.75rem;
+}
+
+.vip-desc {
+    color: #cbd5e1;
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto 1.75rem;
+}
+
+.vip-subscribe-form {
+    max-width: 520px;
+    margin: 0 auto;
+    display: flex;
+    gap: 8px;
+}
+
+.vip-input {
+    border-radius: 50px;
+    padding: 12px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-weight: 500;
+}
+
+.vip-input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--bb-orange);
+    color: #fff;
+    box-shadow: 0 0 15px var(--bb-orange-glow);
+}
+
+.vip-input::placeholder {
+    color: #94a3b8;
+}
+
+/* ==========================================================================
+   10. RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 991px) {
+    .hero-court-section {
+        padding: 2.5rem 1.5rem;
+    }
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    .hero-visual-stage {
+        min-height: 320px;
+        margin-top: 2rem;
+    }
+    .court-orbit-ring {
+        width: 260px;
+        height: 260px;
+    }
+    .hero-main-shoe-img {
+        max-width: 270px;
+    }
 }
 
 @media (max-width: 576px) {
-    .home-hero {
-        background: linear-gradient(155deg, #171717 0%, #343434 70%, #e85b32 70%);
+    .hero-title {
+        font-size: 1.85rem;
     }
-
+    .hero-desc {
+        font-size: 0.95rem;
+    }
+    .vip-title {
+        font-size: 1.65rem;
+    }
+    .vip-subscribe-form {
+        flex-direction: column;
+    }
+    .vip-input, .btn-bb-primary {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
     .home-shoe-card {
-        width: 180px;
-        height: 220px;
+        width: 190px;
+        height: 240px;
     }
-
     .home-shoe-card img {
-        height: 170px;
+        height: 145px;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .home-shoe-track {
-        animation: none;
+    .home-shoe-track,
+    .bb-marquee-track,
+    .interactive-ball,
+    .ball-shadow,
+    .court-orbit-ring,
+    .hero-main-shoe-wrap,
+    .floating-pill-1,
+    .floating-pill-2,
+    .mascot-svg,
+    .mascot-spinning-ball {
+        animation: none !important;
     }
 }
-
-.product-image-container {
-    height: 200px;
-    background-color: #f8f9fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.product-image-container .card-img-top {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-/* .form-check-input {
-  border: 10px solid #000 !important;   
-  border-radius: 10px !important;      
-} */
-

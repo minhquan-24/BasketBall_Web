@@ -61,4 +61,100 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // =========================================================================
+    // HOME PAGE INTERACTIVE MOTION: SHOOTING MINI-GAME
+    // =========================================================================
+    const interactiveBallWrap = document.getElementById('interactive-ball-wrap');
+    const interactiveBall = document.getElementById('interactive-ball');
+    const miniHoopNet = document.getElementById('mini-hoop-net');
+    const scoreToast = document.getElementById('score-toast');
+    let points = 0;
+    let isShooting = false;
+
+    if (interactiveBallWrap && interactiveBall) {
+        interactiveBallWrap.addEventListener('click', function() {
+            if (isShooting) return;
+            isShooting = true;
+
+            // Trigger shooting arc animation
+            interactiveBall.classList.add('shooting');
+
+            // Ball hits the net
+            setTimeout(() => {
+                if (miniHoopNet) {
+                    miniHoopNet.classList.add('swish');
+                }
+                points += 3;
+                if (scoreToast) {
+                    scoreToast.innerHTML = `SWISH! +3 PTS 🔥 (${points} PTS)`;
+                    scoreToast.classList.add('active');
+                }
+            }, 700);
+
+            // Hide toast and reset
+            setTimeout(() => {
+                if (scoreToast) {
+                    scoreToast.classList.remove('active');
+                }
+                if (miniHoopNet) {
+                    miniHoopNet.classList.remove('swish');
+                }
+            }, 1800);
+
+            // Reset ball position
+            setTimeout(() => {
+                interactiveBall.classList.remove('shooting');
+                isShooting = false;
+            }, 2000);
+        });
+    }
+
+    // =========================================================================
+    // HOME PAGE: MASCOT PLAYSTYLE ADVISOR
+    // =========================================================================
+    const playstyleButtons = document.querySelectorAll('.btn-playstyle');
+    const mascotSpeechText = document.getElementById('mascot-speech-text');
+    const mascotSpeechAction = document.getElementById('mascot-speech-action');
+
+    const playstyleData = {
+        guard: {
+            text: "⚡ <strong>Hậu vệ (Guard):</strong> Bạn cần độ bám sân (traction) cực bén, trọng lượng siêu nhẹ và phản xạ đổi hướng tức thì! Gợi ý chiến hài đỉnh cao: <em>Curry 10, Kyrie Flytrap</em>.",
+            url: "index.php?controller=products&action=index&keyword=Curry"
+        },
+        forward: {
+            text: "🚀 <strong>Tiền đạo (Forward):</strong> Bạn cần đệm giảm chấn Zoom Air êm ái, bọc mắt cá chắc chắn và lực bật tối đa khi úp rổ! Gợi ý: <em>Nike LeBron 20, Jordan Zion 1</em>.",
+            url: "index.php?controller=products&action=index&keyword=LeBron"
+        },
+        center: {
+            text: "🛡️ <strong>Trung phong (Center):</strong> Ưu tiên độ ổn định cao, chống lật cổ chân vững chãi và độ bền càn lướt khu vực dưới rổ! Gợi ý: <em>Adidas Harden Vol 7, Cosmic Unity</em>.",
+            url: "index.php?controller=products&action=index&keyword=Harden"
+        },
+        allround: {
+            text: "🌟 <strong>Đa năng (All-Around):</strong> Lựa chọn cân bằng hoàn hảo giữa tốc độ và độ êm, cày tốt cả mặt sân Outdoor lẫn Indoor!",
+            url: "index.php?controller=products&action=index"
+        }
+    };
+
+    if (playstyleButtons.length > 0 && mascotSpeechText) {
+        playstyleButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                playstyleButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const style = this.getAttribute('data-style');
+                if (playstyleData[style]) {
+                    mascotSpeechText.style.opacity = '0';
+                    setTimeout(() => {
+                        mascotSpeechText.innerHTML = playstyleData[style].text;
+                        if (mascotSpeechAction) {
+                            mascotSpeechAction.href = playstyleData[style].url;
+                            mascotSpeechAction.style.display = 'inline-flex';
+                        }
+                        mascotSpeechText.style.opacity = '1';
+                    }, 200);
+                }
+            });
+        });
+    }
 });
