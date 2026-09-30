@@ -40,12 +40,14 @@ if(isset($_SESSION['cart'])){
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <form class="d-flex position-relative ms-3" role="search" onsubmit="return false;"> 
+                <form class="d-flex position-relative ms-lg-4 my-2 my-lg-0 w-100" style="max-width: 400px;" role="search" onsubmit="return false;"> 
                     <div class="input-group">
-                        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                        <input class="form-control" type="search" id="live-search-input" placeholder="Tìm tên giày" aria-label="Search" autocomplete="off">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-pill text-muted">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input class="form-control border-start-0 rounded-end-pill shadow-none" type="search" id="live-search-input" placeholder="Tìm kiếm giày, phụ kiện..." aria-label="Search" autocomplete="off" style="border-left: none;">
                     </div>
-                    <div id="search-results" class="list-group position-absolute w-100 shadow mt-1" style="top: 100%; z-index: 9999; display: none;"></div>
+                    <div id="search-results" class="list-group position-absolute w-100 shadow-lg border-0 rounded-3 mt-1" style="top: 100%; z-index: 9999; display: none; overflow: hidden;"></div>
                 </form>
 
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">    
