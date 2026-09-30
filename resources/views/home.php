@@ -84,7 +84,7 @@ $display_products = (!empty($featured_products) && is_array($featured_products))
         <div class="col">
             <a href="index.php?controller=products&action=index&category_id=1" class="text-decoration-none">
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="Giày bóng rổ" style="height: 250px; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="Giày bóng rổ" style="height: 250px; object-fit: contain;">
                     <div class="card-body text-center bg-dark text-white">
                         <h5 class="card-title fw-bold mb-0">Giày Bóng Rổ</h5>
                     </div>
@@ -94,7 +94,7 @@ $display_products = (!empty($featured_products) && is_array($featured_products))
         <div class="col">
             <a href="index.php?controller=products&action=index&category_id=2" class="text-decoration-none">
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1515523110800-9415d13b84a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="Bóng thi đấu" style="height: 250px; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1515523110800-9415d13b84a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="Bóng thi đấu" style="height: 250px; object-fit: contain;">
                     <div class="card-body text-center bg-dark text-white">
                         <h5 class="card-title fw-bold mb-0">Bóng Thi Đấu</h5>
                     </div>
@@ -104,7 +104,7 @@ $display_products = (!empty($featured_products) && is_array($featured_products))
         <div class="col">
             <a href="index.php?controller=products&action=index&category_id=4" class="text-decoration-none">
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="Phụ kiện" style="height: 250px; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="Phụ kiện" style="height: 250px; object-fit: contain;">
                     <div class="card-body text-center bg-dark text-white">
                         <h5 class="card-title fw-bold mb-0">Túi & Phụ Kiện</h5>
                     </div>
@@ -144,7 +144,7 @@ $display_products = (!empty($featured_products) && is_array($featured_products))
                     <?php endif; ?>
                     
                     <a href="index.php?controller=products&action=show&id=<?php echo $prod_id; ?>" class="text-center p-3">
-                        <img src="<?php echo htmlspecialchars($prod_img); ?>" class="card-img-top rounded-3" alt="<?php echo htmlspecialchars($prod_name); ?>" style="height: 200px; object-fit: cover;">
+                        <img src="<?php echo htmlspecialchars($prod_img); ?>" class="card-img-top rounded-3" alt="<?php echo htmlspecialchars($prod_name); ?>" style="height: 200px; object-fit: contain;">
                     </a>
 
                     <div class="card-body d-flex flex-column">
